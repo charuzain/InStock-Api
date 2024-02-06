@@ -23,7 +23,6 @@ const getWarehouseById = async (req, res) => {
 // Add new warehouse
 
 const addWarehouse = async (req, res) => {
-  // console.log(req.body);
   const {
     warehouse_name,
     address,
@@ -47,7 +46,6 @@ const addWarehouse = async (req, res) => {
   ];
 
   const missingField = requiredFields.filter((field) => !req.body[field]);
-  console.log(missingField);
 
   if (missingField.length > 0) {
     return res
@@ -57,34 +55,37 @@ const addWarehouse = async (req, res) => {
       );
   }
 
-  // const isValidEmail = emailValidator.validate(contact_email);
   const isValidEmail = emailValidator.isEmail(contact_email);
-  console.log(isValidEmail)
 
-  // const phoneRegEx = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
   const phoneRegEx = /^\+?(\d{1,3})?\s*\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
-  console.log(contact_phone)
+
   const isValidPhoneNumber = phoneRegEx.test(contact_phone);
-  console.log(isValidPhoneNumber)
-
-  
-
-  // const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  // const isValidEmail = phoneRegEx.test(contact_email);
 
   if (!isValidEmail || !isValidPhoneNumber) {
-    return res.status(400).send(`Invalid Email address or phone number`)
+    return res.status(400).send(`Invalid Email address or phone number`);
   }
-  else {
-    return res.send("valid")
-  }
-
-  // const emailPattern =
-
+  const newWarehouse = {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  };
   try {
-    const result = await knex;
+    const result = await knex('warehouses').insert(newWarehouse);
+    console.log(result);
+    const newWarehouseId = result[0];
+    const createdWarehouse = await knex('warehouses').where({
+      id: newWarehouseId,
+    });
+    return res.status(201).json(createdWarehouse);
   } catch (error) {
-    console.log(error);
+   res.status(500).json({
+     message: `Unable to create new user: ${error}`,
+   });
   }
 };
 

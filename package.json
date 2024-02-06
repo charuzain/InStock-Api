@@ -38,7 +38,8 @@
     "sqlstring": "^2.3.3",
     "supports-preserve-symlinks-flag": "^1.0.0",
     "tarn": "^3.0.2",
-    "tildify": "^2.0.0"
+    "tildify": "^2.0.0",
+    "validator": "^13.11.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

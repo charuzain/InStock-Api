@@ -1,5 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
-const emailValidator = require('email-validator');
+const emailValidator = require('validator');
 
 const getWarehouses = async (req, res) => {
   try {
@@ -35,17 +35,6 @@ const addWarehouse = async (req, res) => {
     contact_email,
   } = req.body;
 
-  //  console.log({
-  //   warehouse_name,
-  //   address,
-  //   city,
-  //   country,
-  //   contact_name,
-  //   contact_position,
-  //   contact_phone,
-  //   contact_email,
-  // });
-
   const requiredFields = [
     'warehouse_name',
     'address',
@@ -68,8 +57,27 @@ const addWarehouse = async (req, res) => {
       );
   }
 
-  const isValidEmail = emailValidator.validate(contact_email)
+  // const isValidEmail = emailValidator.validate(contact_email);
+  const isValidEmail = emailValidator.isEmail(contact_email);
   console.log(isValidEmail)
+
+  // const phoneRegEx = /^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/;
+  const phoneRegEx = /^\+?(\d{1,3})?\s*\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+  console.log(contact_phone)
+  const isValidPhoneNumber = phoneRegEx.test(contact_phone);
+  console.log(isValidPhoneNumber)
+
+  
+
+  // const emailRegEx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // const isValidEmail = phoneRegEx.test(contact_email);
+
+  if (!isValidEmail || !isValidPhoneNumber) {
+    return res.status(400).send(`Invalid Email address or phone number`)
+  }
+  else {
+    return res.send("valid")
+  }
 
   // const emailPattern =
 

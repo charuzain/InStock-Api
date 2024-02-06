@@ -1,4 +1,5 @@
 const knex = require('knex')(require('../knexfile'));
+const emailValidator = require('email-validator');
 
 const getWarehouses = async (req, res) => {
   try {
@@ -23,7 +24,16 @@ const getWarehouseById = async (req, res) => {
 
 const addWarehouse = async (req, res) => {
   // console.log(req.body);
-  const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
+  const {
+    warehouse_name,
+    address,
+    city,
+    country,
+    contact_name,
+    contact_position,
+    contact_phone,
+    contact_email,
+  } = req.body;
 
   //  console.log({
   //   warehouse_name,
@@ -36,24 +46,32 @@ const addWarehouse = async (req, res) => {
   //   contact_email,
   // });
 
+  const requiredFields = [
+    'warehouse_name',
+    'address',
+    'city',
+    'country',
+    'contact_name',
+    'contact_position',
+    'contact_phone',
+    'contact_email',
+  ];
 
-const requiredFields = [
-  'warehouse_name',
-  'address',
-  'city',
-  'country',
-  'contact_name',
-  'contact_position',
-  'contact_phone',
-  'contact_email',
-];
+  const missingField = requiredFields.filter((field) => !req.body[field]);
+  console.log(missingField);
 
-  const missingField = requiredFields.filter(field => !req.body[field])
-  console.log(missingField)
- 
   if (missingField.length > 0) {
-    return res.status(400).send(`Can't create new warehouse as the following Required fields are missing :  ${missingField}`)
+    return res
+      .status(400)
+      .send(
+        `Can't create new warehouse as the following Required fields are missing :  ${missingField}`
+      );
   }
+
+  const isValidEmail = emailValidator.validate(contact_email)
+  console.log(isValidEmail)
+
+  // const emailPattern =
 
   try {
     const result = await knex;

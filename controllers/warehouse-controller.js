@@ -1,6 +1,6 @@
 const knex = require('knex')(require('../knexfile'));
 
-const getWarehouse = async (req, res) => {
+const getWarehouses = async (req, res) => {
   try {
     const data = await knex('warehouses');
     console.log(data);
@@ -13,16 +13,50 @@ const getWarehouse = async (req, res) => {
 
 // Get warehouse by ID
 const getWarehouseById = async (req, res) => {
-  try {   
+  try {
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-}
+};
 
 // Add new warehouse
 
 const addWarehouse = async (req, res) => {
+  // console.log(req.body);
+  const { warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email } = req.body;
+
+  //  console.log({
+  //   warehouse_name,
+  //   address,
+  //   city,
+  //   country,
+  //   contact_name,
+  //   contact_position,
+  //   contact_phone,
+  //   contact_email,
+  // });
+
+
+const requiredFields = [
+  'warehouse_name',
+  'address',
+  'city',
+  'country',
+  'contact_name',
+  'contact_position',
+  'contact_phone',
+  'contact_email',
+];
+
+  const missingField = requiredFields.filter(field => !req.body[field])
+  console.log(missingField)
+ 
+  if (missingField.length > 0) {
+    return res.status(400).send(`Can't create new warehouse as the following Required fields are missing :  ${missingField}`)
+  }
+
   try {
+    const result = await knex;
   } catch (error) {
     console.log(error);
   }
@@ -46,11 +80,8 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
-
-
-
 module.exports = {
-  getWarehouse,
+  getWarehouses,
   getWarehouseById,
   addWarehouse,
   editWarehouse,

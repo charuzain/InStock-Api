@@ -11,6 +11,48 @@ const getWarehouse = async (req, res) => {
   }
 };
 
+// Get warehouse by ID
+const getWarehouseById = async (req, res) => {
+  try {   
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+// Add new warehouse
+
+const addWarehouse = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Edit warehouse
+
+const editWarehouse = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// Delete Warehouse
+
+const deleteWarehouse = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+
+
 module.exports = {
   getWarehouse,
+  getWarehouseById,
+  addWarehouse,
+  editWarehouse,
+  deleteWarehouse,
 };

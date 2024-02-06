@@ -60,7 +60,7 @@ const addWarehouse = async (req, res) => {
   const phoneRegEx = /^\+?(\d{1,3})?\s*\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 
   const isValidPhoneNumber = phoneRegEx.test(contact_phone);
-
+  
   if (!isValidEmail || !isValidPhoneNumber) {
     return res.status(400).send(`Invalid Email address or phone number`);
   }

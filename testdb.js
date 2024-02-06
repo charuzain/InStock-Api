@@ -1,4 +1,5 @@
-const knexConfig = require("./knexfile").development; // 如果你在使用 development 环境
+const knexConfig = require("./knexfile").development;
+
 const knex = require("knex")(knexConfig);
 
 knex

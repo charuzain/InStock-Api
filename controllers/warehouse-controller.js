@@ -1,9 +1,9 @@
-const knex = require('knex')(require('../knexfile'));
-const emailValidator = require('validator');
+const knex = require("knex")(require("../knexfile"));
+const emailValidator = require("validator");
 
 const getWarehouses = async (req, res) => {
   try {
-    const data = await knex('warehouses');
+    const data = await knex("warehouses");
     console.log(data);
     res.status(200).json(data);
   } catch (error) {
@@ -35,14 +35,14 @@ const addWarehouse = async (req, res) => {
   } = req.body;
 
   const requiredFields = [
-    'warehouse_name',
-    'address',
-    'city',
-    'country',
-    'contact_name',
-    'contact_position',
-    'contact_phone',
-    'contact_email',
+    "warehouse_name",
+    "address",
+    "city",
+    "country",
+    "contact_name",
+    "contact_position",
+    "contact_phone",
+    "contact_email",
   ];
 
   const missingField = requiredFields.filter((field) => !req.body[field]);
@@ -75,17 +75,17 @@ const addWarehouse = async (req, res) => {
     contact_email,
   };
   try {
-    const result = await knex('warehouses').insert(newWarehouse);
+    const result = await knex("warehouses").insert(newWarehouse);
     console.log(result);
     const newWarehouseId = result[0];
-    const createdWarehouse = await knex('warehouses').where({
+    const createdWarehouse = await knex("warehouses").where({
       id: newWarehouseId,
     });
     return res.status(201).json(createdWarehouse);
   } catch (error) {
-   res.status(500).json({
-     message: `Unable to create new user: ${error}`,
-   });
+    res.status(500).json({
+      message: `Unable to create new user: ${error}`,
+    });
   }
 };
 
@@ -102,7 +102,21 @@ const editWarehouse = async (req, res) => {
 
 const deleteWarehouse = async (req, res) => {
   try {
+    const warehouseDeleted = await knex("warehouses")
+      .where({ id: req.params.id })
+      .delete();
+    if (warehouseDeleted === 0) {
+      return res.status(404).json({
+        message: `The warehouse with ${req.params.id} does not exsit`,
+      });
+    }
+    res.status(200).json({
+      message: `Warehouse with ID ${req.params.id} was successfully deleted`,
+    });
   } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete warehouse:${error}`,
+    });
     console.log(error);
   }
 };

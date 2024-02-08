@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-
 router.use(express.json());
+
+const inventoryController = require("../controllers/inventory-controller");
+router.post('/', inventoryController.addInventory);
 
 router.get('/', (req, res) => {
   console.log("Get request for inventory")

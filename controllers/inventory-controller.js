@@ -1,32 +1,33 @@
 const knex = require('knex')(require('../knexfile'));
 
 const getInventory = async (req, res) => {
-  console.log('ji');
   try {
-    const data = await knex('inventories');
-    console.log(data);
+    const data = await knex('inventories')
+      .join('warehouses', 'inventories.warehouse_id', '=', 'warehouses.id')
+      .select(
+        'inventories.id',
+        'warehouse_name',
+        'item_name',
+        'description',
+        'category',
+        'status',
+        'quantity'
+      );
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
-    res.status(400).send(`Error retriving warehouse data`);
+    res.status(400).send(`Error retriving inventory data`);
   }
 };
 
 const getInventoryById = async (req, res) => {
   try {
-    
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
 const addInventoryItem = async (req, res) => {
   try {
-    
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
 const editInventoryItem = async (req, res) => {
   try {
@@ -43,5 +44,5 @@ module.exports = {
   getInventoryById,
   addInventoryItem,
   editInventoryItem,
-  deleteInventoryItem
+  deleteInventoryItem,
 };

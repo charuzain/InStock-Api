@@ -12,6 +12,7 @@ app.use(express.json());
 app.use("/inventory", inventoryRoutes);
 app.use("/warehouse", warehouseRoutes);
 
+
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
 });

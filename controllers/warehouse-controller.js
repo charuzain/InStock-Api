@@ -121,7 +121,6 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
-//GetWarehouseInventory for WarehouseID
 const getWarehouseInventory=async(req,res)=>{
   try {
     const inventories=await knex('warehouses')
@@ -140,8 +139,6 @@ const getWarehouseInventory=async(req,res)=>{
     
   }
 }
-
-
 module.exports = {
   getWarehouses,
   getWarehouseById,

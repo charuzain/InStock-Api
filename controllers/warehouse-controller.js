@@ -15,8 +15,21 @@ const getWarehouses = async (req, res) => {
 // Get warehouse by ID
 const getWarehouseById = async (req, res) => {
   try {
+    const warehouse = await knex("warehouses")
+      .where({ id: req.params.id })
+      .first();
+
+    if (!warehouse) {
+      return res.status(404).json({
+        message: `Warehouse with ID ${req.params.id} not found`,
+      });
+    }
+    res.json(warehouse);
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      message: `Unable to retrieve warehouse data for warehouse with ID ${req.params.id}`,
+    });
+    console.error(error);
   }
 };
 

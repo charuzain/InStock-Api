@@ -8,6 +8,9 @@ router.get("/", inventoryController.getInventory);
 router.get("/:id", inventoryController.getInventoryById);
 router.post("/", inventoryController.addInventoryItem);
 router.put("/:id", inventoryController.editInventoryItem);
-router.delete("/:id", inventoryController.deleteInventoryItem);
+router.delete('/:id', inventoryController.deleteInventoryItem);
+
+
+
 
 module.exports = router;

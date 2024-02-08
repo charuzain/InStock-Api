@@ -115,7 +115,21 @@ const editWarehouse = async (req, res) => {
 
 const deleteWarehouse = async (req, res) => {
   try {
+    const warehouseDeleted = await knex("warehouses")
+      .where({ id: req.params.id })
+      .delete();
+    if (warehouseDeleted === 0) {
+      return res.status(404).json({
+        message: `The warehouse with ${req.params.id} does not exsit`,
+      });
+    }
+    res.status(200).json({
+      message: `Warehouse with ID ${req.params.id} was successfully deleted`,
+    });
   } catch (error) {
+    res.status(500).json({
+      message: `Unable to delete warehouse:${error}`,
+    });
     console.log(error);
   }
 };

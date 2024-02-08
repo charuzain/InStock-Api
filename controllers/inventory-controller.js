@@ -31,7 +31,9 @@ const addInventoryItem = async (req, res) => {
 
 const editInventoryItem = async (req, res) => {
   try {
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 const deleteInventoryItem = async (req, res) => {

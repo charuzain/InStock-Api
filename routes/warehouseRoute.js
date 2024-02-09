@@ -9,5 +9,8 @@ router.get("/:id", warehouseController.getWarehouseById);
 router.post("/", warehouseController.addWarehouse);
 router.put("/:id", warehouseController.editWarehouse);
 router.delete("/:id", warehouseController.deleteWarehouse);
+router.get("/:id/inventories",warehouseController.getWarehouseInventory);
+router.post('/api/inventories', inventoryController.addInventory);
+router.post('/', inventoryController.addInventory);
 
 module.exports = router;

@@ -9,8 +9,8 @@ const cors = require("cors");
 app.use(cors());
 app.use(express.json());
 
-app.use("/inventory", inventoryRoutes);
-app.use("/warehouse", warehouseRoutes);
+app.use("/inventories", inventoryRoutes);
+app.use("/warehouses", warehouseRoutes);
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);

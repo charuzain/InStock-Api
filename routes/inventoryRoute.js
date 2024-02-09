@@ -6,8 +6,7 @@ router.use(express.json());
 
 router.get("/", inventoryController.getInventory);
 router.get("/:id", inventoryController.getInventoryById);
-router.post("/", inventoryController.addInventoryItem);
-router.put("/:id", inventoryController.editInventoryItem);
+router.put("/:id", inventoryController.editInventory);
 router.delete('/:id', inventoryController.deleteInventoryItem);
 
 const inventoryController = require("../controllers/inventory-controller");

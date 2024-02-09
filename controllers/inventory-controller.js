@@ -2,6 +2,7 @@ const knex = require('knex')(require('../knexfile'));
 const express = require('express');
 const router = express.Router();
 
+//get inventory by id
 const addInventory = async (req, res) => {
  
   if (

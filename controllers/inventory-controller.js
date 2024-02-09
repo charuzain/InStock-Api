@@ -41,15 +41,54 @@ const getInventoryById = async (req, res) => {
   }
 };
 
-const addInventoryItem = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+// Edit inventory
+const editInventory = async (req, res) => {
+  const { item_name, description, category, status, quantity } = req.body;
 
-const editInventoryItem = async (req, res) => {
+  const requiredFields = [
+    "item_name",
+    "description",
+    "category",
+    "status",
+    "quantity",
+  ];
+
+  const missingField = requiredFields.filter((field) => !req.body[field]);
+
+  if (missingField.length > 0) {
+    return res
+      .status(400)
+      .send(
+        `Can't update inventory as the following Required fields are missing :  ${missingField}`
+      );
+  }
+
+  const updatedInventory = {
+    item_name,
+    description,
+    category,
+    status,
+    quantity,
+  };
   try {
+    const data = await knex("inventories")
+      .where({ id: req.params.id })
+      .update(updatedInventory);
+
+    if (data === 0) {
+      return res
+        .status(404)
+        .send(`Inventory not found with ID ${req.params.id}`);
+    }
+    const response = await knex("inventories")
+      .where({ id: req.params.id })
+      .first();
+    return res.status(200).json(response);
   } catch (error) {
     console.log(error);
+    res.status(400).json({
+      message: `Error updating the inventory with id ${req.params.id}`,
+    });
   }
 };
 
@@ -77,7 +116,6 @@ const deleteInventoryItem = async (req, res) => {
 module.exports = {
   getInventory,
   getInventoryById,
-  addInventoryItem,
-  editInventoryItem,
+  editInventory,
   deleteInventoryItem,
 };

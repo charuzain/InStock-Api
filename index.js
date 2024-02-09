@@ -14,8 +14,8 @@ app.use(cors({
     origin: CLIENT_URL
   }));
 
-app.use("/inventory", inventoryRoutes);
-app.use("/warehouse", warehouseRoutes);
+app.use("/inventories", inventoryRoutes);
+app.use("/warehouses", warehouseRoutes);
 
 
 app.listen(PORT, () => {

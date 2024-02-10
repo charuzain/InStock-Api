@@ -203,6 +203,7 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
+
 const getWarehouseInventory=async(req,res)=>{
   try {
     const inventories=await knex('warehouses')

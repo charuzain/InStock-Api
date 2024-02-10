@@ -19,7 +19,7 @@ const getWarehouseById = async (req, res) => {
       .where({ id: req.params.id })
       .first();
 
-    if (!warehouse) {
+    if (!warehouse.length === 0) {
       return res.status(404).json({
         message: `Warehouse with ID ${req.params.id} not found`,
       });
@@ -203,24 +203,25 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
-const getWarehouseInventory=async(req,res)=>{
+const getWarehouseInventory = async (req, res) => {
   try {
-    const inventories=await knex('warehouses')
-      .join("inventories","inventories.warehouse_id","warehouses.id")
-      .where ({warehouse_id:req.params.id});
+    const inventories = await knex("warehouses")
+      .join("inventories", "inventories.warehouse_id", "warehouses.id")
+      .where({ warehouse_id: req.params.id })
+      .first();
 
-      if (inventories.length === 0) {
-        return res.status(404).json({ message: "No inventories found for the specified warehouse ID" });
-      }
+    if (inventories.length === 0) {
+      return res.status(404).json({
+        message: "No inventories found for the specified warehouse ID",
+      });
+    }
 
-      res.json(inventories);
-      res.status(500).json({
-        message:"No posts for you"
-      })
-  } catch (error) {
-    
-  }
-}
+    res.json(inventories);
+    res.status(500).json({
+      message: "No posts for you",
+    });
+  } catch (error) {}
+};
 module.exports = {
   getWarehouses,
   getWarehouseById,

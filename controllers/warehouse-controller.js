@@ -121,24 +121,23 @@ const deleteWarehouse = async (req, res) => {
   }
 };
 
-const getWarehouseInventory=async(req,res)=>{
+const getWarehouseInventory = async (req, res) => {
   try {
-    const inventories=await knex('warehouses')
-      .join("inventories","inventories.warehouse_id","warehouses.id")
-      .where ({warehouse_id:req.params.id});
+    const inventories = await knex('warehouses')
+      .join('inventories', 'inventories.warehouse_id', 'warehouses.id')
+      .select('inventories.id', 'inventories.item_name', 'inventories.category', 'inventories.status', 'inventories.quantity')
+      .where('warehouses.id', req.params.id);
 
-      if (inventories.length === 0) {
-        return res.status(404).json({ message: "No inventories found for the specified warehouse ID" });
-      }
+    if (inventories.length === 0) {
+      return res.status(404).json({ message: "No inventories found for the specified warehouse ID" });
+    }
 
-      res.json(inventories);
-      res.status(500).json({
-        message:"No posts for you"
-      })
+    res.json(inventories);
   } catch (error) {
-    
+    console.error("Error fetching inventory data:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 module.exports = {
   getWarehouses,
   getWarehouseById,

@@ -1,5 +1,6 @@
 const knex = require("knex")(require("../knexfile"));
 const express = require("express");
+const { update } = require("lodash");
 const router = express.Router();
 
 const addInventory = async (req, res) => {
@@ -76,6 +77,7 @@ const getInventoryById = async (req, res) => {
         message: `Inventory with ID ${req.params.id} not found`,
       });
     }
+    console.log(inventory);
     res.status(200).json(inventory);
   } catch (error) {
     res.status(500).json({
@@ -87,9 +89,13 @@ const getInventoryById = async (req, res) => {
 
 // Edit inventory
 const editInventory = async (req, res) => {
-  const { item_name, description, category, status, quantity } = req.body;
+  const { warehouse_id, item_name, description, category, status, quantity } =
+    req.body;
+  console.log(req.params.id);
+  console.log(req.body);
 
   const requiredFields = [
+    "warehouse_id",
     "item_name",
     "description",
     "category",
@@ -108,12 +114,14 @@ const editInventory = async (req, res) => {
   }
 
   const updatedInventory = {
+    warehouse_id,
     item_name,
     description,
     category,
     status,
     quantity,
   };
+  console.log(updatedInventory);
   try {
     const data = await knex("inventories")
       .where({ id: req.params.id })
@@ -131,7 +139,7 @@ const editInventory = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).json({
-      message: `Error updating the inventory with id ${req.params.id}`,
+      message: error,
     });
   }
 };

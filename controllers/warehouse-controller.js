@@ -4,12 +4,30 @@ const emailValidator = require('validator');
 const getWarehouses = async (req, res) => {
   try {
     const data = await knex('warehouses');
-    const query = req.query.sort_by;
-    const sortedData = data.sort((a, b) =>
-      a.warehouse_name.localeCompare(b.warehouse_name)
-    );
-    console.log(sortedData);
-    res.status(200).json(sortedData);
+    const sort_by = req.query.sort_by;
+    const order_by = req.query.order_by;
+    if (sort_by && order_by) {
+      if (order_by === 'asc') {
+        const sortedData = data.sort((a, b) =>
+          a[sort_by].localeCompare(b[sort_by])
+        );
+        return res.status(200).json(sortedData);
+      } else {
+        const sortedData = data.sort((a, b) =>
+          b[sort_by].localeCompare(a[sort_by])
+        );
+        return res.status(200).json(sortedData);
+      }
+    }
+
+    if (sort_by) {
+      const sortedData = data.sort((a, b) =>
+        a[sort_by].localeCompare(b[sort_by])
+      );
+      return res.status(200).json(sortedData);
+    }
+
+    res.status(200).json(data);
   } catch (error) {
     console.log(error);
     res.status(400).send(`Error retriving warehouse data`);
@@ -214,11 +232,9 @@ const getWarehouseInventory = async (req, res) => {
       .where({ warehouse_id: req.params.id });
 
     if (inventories.length === 0) {
-      return res
-        .status(404)
-        .json({
-          message: 'No inventories found for the specified warehouse ID',
-        });
+      return res.status(404).json({
+        message: 'No inventories found for the specified warehouse ID',
+      });
     }
 
     res.json(inventories);

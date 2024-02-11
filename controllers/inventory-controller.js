@@ -44,24 +44,54 @@ const addInventory = async (req, res) => {
     });
   }
 };
+// const getInventory = async (req, res) => {
+//   try {
+//     const data = await knex("inventories")
+//       .join("warehouses", "inventories.warehouse_id", "=", "warehouses.id")
+//       .select(
+//         "inventories.id",
+//         "warehouse_name",
+//         "item_name",
+//         "description",
+//         "category",
+//         "status",
+//         "quantity"
+//       );
+//     res.status(200).json(data);
+//   } catch (error) {
+//     res.status(400).send(`Error retriving inventory data`);
+//   }
+// };
+
 const getInventory = async (req, res) => {
   try {
-    const data = await knex("inventories")
-      .join("warehouses", "inventories.warehouse_id", "=", "warehouses.id")
+    let query = knex('inventories')
+      .join('warehouses', 'inventories.warehouse_id', '=', 'warehouses.id')
       .select(
-        "inventories.id",
-        "warehouse_name",
-        "item_name",
-        "description",
-        "category",
-        "status",
-        "quantity"
+        'inventories.id',
+        'warehouse_name',
+        'item_name',
+        'description',
+        'category',
+        'status',
+        'quantity'
       );
+
+    const sort_by = req.query.sort_by;
+    const order_by = req.query.order_by || 'asc'; 
+
+    if (sort_by) {
+      query = query.orderBy(sort_by, order_by);
+    }
+
+    const data = await query;
+
     res.status(200).json(data);
   } catch (error) {
-    res.status(400).send(`Error retriving inventory data`);
+    res.status(400).send(`Error retrieving inventory data`);
   }
 };
+
 
 // Get inventory by ID
 

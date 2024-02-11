@@ -18,20 +18,21 @@ const getWarehouses = async (req, res) => {
 
     const sort_by = req.query.sort_by;
     const order_by = req.query.order_by;
-    const searchWarehouseTerm = req.query.warehouseSearchTerm;
-    console.log(searchWarehouseTerm);
+    const s = req.query.warehouseSearchTerm;
+    console.log(s);
 
     if (sort_by) {
       warehouseQuery = warehouseQuery.orderBy(sort_by, order_by || 'asc');
     }
-    if (searchWarehouseTerm) {
+    if (s) {
       warehouseQuery = warehouseQuery.where((builder) => {
         builder
-          .where('warehouse_name', 'like', `%${searchWarehouseTerm}%`)
-          .orWhere('address', 'like', `%${searchWarehouseTerm}%`)
-          .orWhere('city', 'like', `%${searchWarehouseTerm}%`)
-          .orWhere('country', 'like', `%${searchWarehouseTerm}%`)
-          .orWhere('contact_email', 'like', `%${searchWarehouseTerm}%`);
+          .where('warehouse_name', 'like', `%${s}%`)
+          .orWhere('address', 'like', `%${s}%`)
+          .orWhere('city', 'like', `%${s}%`)
+          .orWhere('country', 'like', `%${s}%`)
+          .orWhere('contact_name', 'like', `%${s}%`)
+          .orWhere('contact_email', 'like', `%${s}%`);
       });
     }
 
@@ -43,7 +44,6 @@ const getWarehouses = async (req, res) => {
     res.status(400).send(`Error retrieving warehouse data`);
   }
 };
-
 
 // Get warehouse by ID
 const getWarehouseById = async (req, res) => {

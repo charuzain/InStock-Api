@@ -1,25 +1,12 @@
 const knex = require('knex')(require('../knexfile'));
 const emailValidator = require('validator');
 
-// const getWarehouses = async (req, res) => {
-//   try {
-//     const data = await knex("warehouses");
-//     // console.log(data);
-//     res.status(200).json(data);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).send(`Error retriving warehouse data`);
-//   }
-// };
-
 const getWarehouses = async (req, res) => {
   try {
     let warehouseQuery = knex('warehouses');
-
     const sort_by = req.query.sort_by;
     const order_by = req.query.order_by;
     const s = req.query.warehouseSearchTerm;
-    console.log(s);
 
     if (sort_by) {
       warehouseQuery = warehouseQuery.orderBy(sort_by, order_by || 'asc');
@@ -35,9 +22,7 @@ const getWarehouses = async (req, res) => {
           .orWhere('contact_email', 'like', `%${s}%`);
       });
     }
-
     const data = await warehouseQuery;
-
     res.status(200).json(data);
   } catch (error) {
     console.log(error);

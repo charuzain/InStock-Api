@@ -8,9 +8,9 @@
 
 Clone the project repository to your local machine by running the following command:
 
-\`\`\`bash
+```bash
 git clone https://github.com/charuzain/InStock-Api.git
-\`\`\`
+```
 
 #### Setup
 
@@ -18,17 +18,17 @@ git clone https://github.com/charuzain/InStock-Api.git
 
 2. Install the project dependencies by running the following command:
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 #### Run
 
 To run the server locally, use nodemon by executing the following command:
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 ### .env file
 
@@ -49,22 +49,25 @@ To set up the database for the project, follow these steps:
 
 1. **Create Database**: Connect to your local MySQL server and run the following command to create a database named 'instock':
 
-\`\`\`sql
+```sql
 create database instock;
-\`\`\`
+```
 
 2. **Switch to Database**: After creating the database, switch to the 'instock' database by running the following command:
 
-\`\`\`sql
+```sql
 use instock;
-\`\`\`
+```
 
-3. **Run Migrations and Seed Data**: Navigate to the server folder of your project and run the migrations and seed data scripts. These commands will be specified in the \`package.json\` file:
+3. **Run Migrations and Seed Data**: Navigate to the server folder of your project and run the migrations and seed data scripts. 
 
-\`\`\`bash
+```bash
 npx knex migrate:latest
+```
+```bash
 npx knex seed:run
-\`\`\`
+```
+
 
 These commands will set up the necessary tables and seed data for the project.
 

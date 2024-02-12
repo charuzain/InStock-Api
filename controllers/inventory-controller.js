@@ -2,6 +2,75 @@ const knex = require('knex')(require('../knexfile'));
 const express = require('express');
 const router = express.Router();
 
+const getInventory = async (req, res) => {
+  try {
+    let query = knex('inventories')
+      .join('warehouses', 'inventories.warehouse_id', '=', 'warehouses.id')
+      .select(
+        'inventories.id',
+        'warehouse_name',
+        'item_name',
+        'description',
+        'category',
+        'status',
+        'quantity'
+      );
+
+    const sort_by = req.query.sort_by;
+    const order_by = req.query.order_by || 'asc';
+
+    if (sort_by) {
+      query = query.orderBy(sort_by, order_by);
+    }
+    const s = req.query.s;
+    if (s) {
+      query = query.where((builder) => {
+        builder
+          .where('inventories.item_name', 'like', `%${s}%`)
+          .orWhere('warehouses.warehouse_name', 'like', `%${s}%`)
+          .orWhere('inventories.category', 'like', `%${s}%`)
+          .orWhere('inventories.description', 'like', `%${s}%`);
+      });
+    }
+
+    const data = await query;
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(400).send(`Error retrieving inventory data`);
+  }
+};
+
+const getInventoryById = async (req, res) => {
+  try {
+    const inventory = await knex('inventories')
+      .join('warehouses', 'inventories.warehouse_id', 'warehouses.id')
+      .where({ 'inventories.id': req.params.id })
+      .select(
+        'inventories.id',
+        'warehouse_name',
+        'item_name',
+        'description',
+        'category',
+        'status',
+        'quantity'
+      )
+      .first();
+
+    if (!inventory.length === 0) {
+      return res.status(404).json({
+        message: `Inventory with ID ${req.params.id} not found`,
+      });
+    }
+    res.status(200).json(inventory);
+  } catch (error) {
+    res.status(500).json({
+      message: `Unable to retrieve inventory data for inventory with ID ${req.params.id}`,
+    });
+    console.error(error);
+  }
+};
+
 const addInventory = async (req, res) => {
   if (
     !req.body.item_name ||
@@ -44,103 +113,9 @@ const addInventory = async (req, res) => {
     });
   }
 };
-// const getInventory = async (req, res) => {
-//   try {
-//     const data = await knex("inventories")
-//       .join("warehouses", "inventories.warehouse_id", "=", "warehouses.id")
-//       .select(
-//         "inventories.id",
-//         "warehouse_name",
-//         "item_name",
-//         "description",
-//         "category",
-//         "status",
-//         "quantity"
-//       );
-//     res.status(200).json(data);
-//   } catch (error) {
-//     res.status(400).send(`Error retriving inventory data`);
-//   }
-// };
 
-const getInventory = async (req, res) => {
-  try {
-    let query = knex('inventories')
-      .join('warehouses', 'inventories.warehouse_id', '=', 'warehouses.id')
-      .select(
-        'inventories.id',
-        'warehouse_name',
-        'item_name',
-        'description',
-        'category',
-        'status',
-        'quantity'
-      );
-
- const sort_by = req.query.sort_by;
- const order_by = req.query.order_by || 'asc';
-
- if (sort_by) {
-   query = query.orderBy(sort_by, order_by);
- }
-    const s = req.query.s;
-    if (s) {
-      query = query.where((builder) => {
-        builder
-          .where('inventories.item_name', 'like', `%${s}%`)
-          .orWhere('warehouses.warehouse_name', 'like', `%${s}%`)
-          .orWhere('inventories.category', 'like', `%${s}%`)
-          .orWhere('inventories.description', 'like', `%${s}%`);
-      });
-    }
-
-    const data = await query;
-
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(400).send(`Error retrieving inventory data`);
-  }
-};
-
-
-// Get inventory by ID
-const getInventoryById = async (req, res) => {
-  try {
-
-    const inventory = await knex("inventories")
-      .join("warehouses", "inventories.warehouse_id", "warehouses.id")
-      .where({ "inventories.id": req.params.id })
-      .select(
-        "inventories.id",
-        "warehouse_name",
-        "item_name",
-        "description",
-        "category",
-        "status",
-        "quantity"
-      )
-
-      .first();
-
-    if (!inventory.length === 0) {
-      return res.status(404).json({
-        message: `Inventory with ID ${req.params.id} not found`,
-      });
-    }
-
-    res.status(200).json(inventory);
-  } catch (error) {
-    res.status(500).json({
-      message: `Unable to retrieve inventory data for inventory with ID ${req.params.id}`,
-    });
-    console.error(error);
-  }
-};
-
-// Edit inventory
 const editInventory = async (req, res) => {
   const { item_name, description, category, status, quantity } = req.body;
-
   const requiredFields = [
     'item_name',
     'description',
@@ -148,7 +123,6 @@ const editInventory = async (req, res) => {
     'status',
     'quantity',
   ];
-
   const missingField = requiredFields.filter((field) => !req.body[field]);
 
   if (missingField.length > 0) {
@@ -187,8 +161,6 @@ const editInventory = async (req, res) => {
     });
   }
 };
-
-// Delete Inventory
 
 const deleteInventoryItem = async (req, res) => {
   try {

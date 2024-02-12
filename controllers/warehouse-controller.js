@@ -3,7 +3,6 @@ const emailValidator = require('validator');
 
 const getWarehouses = async (req, res) => {
   try {
-
     let warehouseQuery = knex('warehouses');
     const sort_by = req.query.sort_by;
     const order_by = req.query.order_by;
@@ -32,7 +31,6 @@ const getWarehouses = async (req, res) => {
   }
 };
 
-// Get warehouse by ID
 const getWarehouseById = async (req, res) => {
   try {
     const warehouse = await knex('warehouses')
@@ -52,8 +50,6 @@ const getWarehouseById = async (req, res) => {
     console.error(error);
   }
 };
-
-// Add new warehouse
 
 const addWarehouse = async (req, res) => {
   const {
@@ -121,8 +117,6 @@ const addWarehouse = async (req, res) => {
     });
   }
 };
-
-// Edit warehouse
 
 const editWarehouse = async (req, res) => {
   const {
@@ -200,8 +194,6 @@ const editWarehouse = async (req, res) => {
   }
 };
 
-// Delete Warehouse
-
 const deleteWarehouse = async (req, res) => {
   try {
     const warehouseDeleted = await knex('warehouses')
@@ -228,35 +220,18 @@ const getWarehouseInventory = async (req, res) => {
     const inventories = await knex('warehouses')
       .join('inventories', 'inventories.warehouse_id', 'warehouses.id')
       .where({ warehouse_id: req.params.id })
-    .first();
-
-
+      .first();
     if (inventories.length === 0) {
       return res.status(404).json({
         message: 'No inventories found for the specified warehouse ID',
       });
     }
-
     res.json(inventories);
+  } catch (error) {
     res.status(500).json({
       message: 'No posts for you',
     });
-  } catch (error) {}
-
-
-//       .select('inventories.id', 'inventories.item_name', 'inventories.category', 'inventories.status', 'inventories.quantity')
-//       .where('warehouses.id', req.params.id);
-
-//     if (inventories.length === 0) {
-//       return res.status(404).json({ message: "No inventories found for the specified warehouse ID" });
-//     }
-
-//     res.json(inventories);
-//   } catch (error) {
-//     console.error("Error fetching inventory data:", error);
-//     res.status(500).json({ message: "Internal server error" });
-//   }
-
+  }
 
 };
 module.exports = {

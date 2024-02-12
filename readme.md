@@ -27,7 +27,7 @@ npm install
 To run the server locally, use nodemon by executing the following command:
 
 ```bash
-npm run dev
+npm start
 ```
 
 ### .env file

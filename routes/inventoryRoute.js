@@ -9,9 +9,5 @@ router.put("/:id", inventoryController.editInventory);
 router.delete("/:id", inventoryController.deleteInventoryItem);
 router.post("/", inventoryController.addInventory);
 
-router.get("/", (req, res) => {
-  console.log("Get request for inventory");
-  res.send("Inventory Routes");
-});
 
 module.exports = router;

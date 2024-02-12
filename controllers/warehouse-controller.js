@@ -3,6 +3,7 @@ const emailValidator = require('validator');
 
 const getWarehouses = async (req, res) => {
   try {
+
     let warehouseQuery = knex('warehouses');
     const sort_by = req.query.sort_by;
     const order_by = req.query.order_by;
@@ -23,6 +24,7 @@ const getWarehouses = async (req, res) => {
       });
     }
     const data = await warehouseQuery;
+
     res.status(200).json(data);
   } catch (error) {
     console.log(error);
@@ -107,6 +109,7 @@ const addWarehouse = async (req, res) => {
   };
   try {
     const result = await knex('warehouses').insert(newWarehouse);
+
     const newWarehouseId = result[0];
     const createdWarehouse = await knex('warehouses').where({
       id: newWarehouseId,
@@ -227,6 +230,7 @@ const getWarehouseInventory = async (req, res) => {
       .where({ warehouse_id: req.params.id })
     .first();
 
+
     if (inventories.length === 0) {
       return res.status(404).json({
         message: 'No inventories found for the specified warehouse ID',
@@ -238,6 +242,7 @@ const getWarehouseInventory = async (req, res) => {
       message: 'No posts for you',
     });
   } catch (error) {}
+
 
 //       .select('inventories.id', 'inventories.item_name', 'inventories.category', 'inventories.status', 'inventories.quantity')
 //       .where('warehouses.id', req.params.id);
@@ -251,6 +256,7 @@ const getWarehouseInventory = async (req, res) => {
 //     console.error("Error fetching inventory data:", error);
 //     res.status(500).json({ message: "Internal server error" });
 //   }
+
 
 };
 module.exports = {

@@ -76,6 +76,7 @@ const getInventory = async (req, res) => {
         'status',
         'quantity'
       );
+
  const sort_by = req.query.sort_by;
  const order_by = req.query.order_by || 'asc';
 
@@ -94,11 +95,13 @@ const getInventory = async (req, res) => {
     }
 
     const data = await query;
+
     res.status(200).json(data);
   } catch (error) {
     res.status(400).send(`Error retrieving inventory data`);
   }
 };
+
 
 // Get inventory by ID
 const getInventoryById = async (req, res) => {

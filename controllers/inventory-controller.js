@@ -45,6 +45,8 @@ const addInventory = async (req, res) => {
     });
   }
 };
+
+
 const getInventory = async (req, res) => {
   try {
     const data = await knex("inventories")
@@ -118,6 +120,8 @@ const deleteInventoryItem = async (req, res) => {
     console.log(error);
   }
 };
+
+
 module.exports = {
   getInventory,
   addInventory,
